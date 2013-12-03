@@ -1,0 +1,36 @@
+OMNIBUS on-chip bus
+-------------------
+
+OMNIBUS is a simple, pipelined bus written in SystemVerilog. It is based on
+the Open Core Protocol (OCP) specification. Request and response channels are
+independent and have individual handshakes. This allows to start a new request
+in every cycle and allows for arbitrary latency of attached slaves. The bus
+fabric is constructed from three basic building blocks for arbitration of
+masters, multiplexing to slaves, and pipelining of requests and responses.
+
+To ease the description of the fabric in the HDL code, a domain-specific
+language (DSL) implemented with M4 macros can be used. However, this is
+optional. Using the DSL, bus fabric description looks like this:
+
+  include(bus.m4)
+
+  bus_begin(testbus, clk, <:.byteen(1):>)
+    master(bus_master_a) 
+    master(bus_master_b)
+    master(bus_master_c) arb arb
+        delay
+        split(29)
+          split(28)
+            slave(0)
+            slave(1)
+          split(28)
+            delay slave(2_d2)
+            slave(3)
+  bus_end()
+
+
+The bus fabric was initially developed in the course of a PhD thesis.
+Additional information and a detailed description of the building blocks is
+therefore available in the Dissertation of Simon Friedmann in the doc/
+directory.
+
