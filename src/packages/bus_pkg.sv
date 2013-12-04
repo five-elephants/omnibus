@@ -17,4 +17,14 @@ package Bus;
 		FAIL = 2'b10,
 		ERR  = 2'b11
 	} Ocp_resp;
+
+	function automatic int clog2(input int x);
+		int rv, y;
+		y = 1;
+		for(rv=0; y < x; rv++) begin 
+			y = y * 2;
+		end
+		return rv;
+		//return $clog2(x);
+	endfunction
 endpackage

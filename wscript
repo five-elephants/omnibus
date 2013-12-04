@@ -22,3 +22,8 @@ def configure(conf):
     ]
     conf.env.OMNIBUS_VERILOG_INCLUDE = [
     ]
+
+    conf.env.OMNIBUS_M4_INCLUDE = [
+        conf.path.abspath() + '/m4',
+    ]
+

@@ -22,7 +22,7 @@ define(<:master:>, <:pushdef(<:busout:>, <:$1:>):>)
 define(<:slave:>, <:define(busprefix()_slave_$1, busout)popdef(<:busout:>):>)
 define(<:terminator:>, <:
   define(<:node_n:>, incr(node_n))dnl
-Bus_slave_terminator busprefix()_t<::>node_n() (busout)popdef(<:busout:>):>)
+Bus_slave_terminator busprefix()_t<::>node_n() (busout);popdef(<:busout:>):>)
 
 dnl define(<:with_byteen:>. <:.byteen(1):>)
 define(<:num_in_flight:>, <:.NUM_IN_FLIGHT($1):>)

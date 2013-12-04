@@ -226,8 +226,8 @@ module Serialize
   // Local types and signals
   //---------------------------------------------------------------------------
  
-  //localparam int COUNTER_WIDTH = Pu_types::clog2($ceil(real'(PARALLEL_WIDTH)/real'(SERIAL_WIDTH)) +1); // ncsim does not like
-  localparam int COUNTER_WIDTH = Pu_types::clog2(PARALLEL_WIDTH/SERIAL_WIDTH +2);
+  //localparam int COUNTER_WIDTH = Bus::clog2($ceil(real'(PARALLEL_WIDTH)/real'(SERIAL_WIDTH)) +1); // ncsim does not like
+  localparam int COUNTER_WIDTH = Bus::clog2(PARALLEL_WIDTH/SERIAL_WIDTH +2);
   typedef logic[COUNTER_WIDTH-1:0] Counter;
 
   //localparam Counter COUNTER_END = $ceil(PARALLEL_WIDTH/SERIAL_WIDTH);  // ncsim does not like
@@ -349,8 +349,8 @@ module Deserialize
     output logic valid_out,
     output logic ready);
 
-  //localparam int COUNTER_WIDTH = Pu_types::clog2($ceil(real'(PARALLEL_WIDTH)/real'(SERIAL_WIDTH)) +1); // ncsim does not like
-  localparam int COUNTER_WIDTH = Pu_types::clog2(PARALLEL_WIDTH/SERIAL_WIDTH +2);
+  //localparam int COUNTER_WIDTH = Bus::clog2($ceil(real'(PARALLEL_WIDTH)/real'(SERIAL_WIDTH)) +1); // ncsim does not like
+  localparam int COUNTER_WIDTH = Bus::clog2(PARALLEL_WIDTH/SERIAL_WIDTH +2);
   typedef logic[COUNTER_WIDTH-1:0] Counter;
 
   //localparam Counter COUNTER_END = $ceil(PARALLEL_WIDTH/SERIAL_WIDTH);  // ncsim does not like
