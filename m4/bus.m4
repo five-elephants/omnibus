@@ -22,12 +22,12 @@ divert(-1)dnl
     Bus_slave_terminator busprefix()_t<::>node_n() (busout);popdef(<:busout:>)dnl:>)
 
   dnl define(<:with_byteen:>. <:.byteen(1):>)
-  define(<:num_in_flight:>, <:.NUM_IN_FLIGHT($1):>)
+  define(<:num_in_flight:>, <:.NUM_IN_FLIGHT(:>$<::>1<:):>)
 
   define(<:arb:>, <:define(<:node_n:>, incr(node_n))dnl
 
     Bus_if<::>interfaceparam() busprefix()_out_<::>incr(out_n) (.Clk(busclk));
-    Bus_if_arb ifelse(:> $<::>1 <:,<::>, <::>, <:<:#:>(:>:> $<::>1 <:<:)):>) busprefix()_a<::>node_n() (
+    Bus_if_arb ifelse(:> $<::>1 <:,<::>, <::>, <:<:#:>(:>:> $<::>1 <:<:):>) busprefix()_a<::>node_n() (
       .in_1(busout)popdef(<:busout:>),
       .in_0(busout)popdef(<:busout:>), define(<:out_n:>, incr(out_n)) pushdef(<:busout:>, <:busprefix()_out_<::>out_n():>)
       .out(busout)
@@ -47,7 +47,7 @@ divert(-1)dnl
 
     Bus_if<::>interfaceparam() busprefix()_out_<::>incr(out_n) (.Clk(busclk));
     Bus_if<::>interfaceparam() busprefix()_out_<::>incr(incr(out_n)) (.Clk(busclk));
-    Bus_if_split <:#:>(:>$<::>1 $<::>2<:) busprefix()_s<::>node_n() (
+    Bus_if_split <:#:>(.SELECT_BIT(:>$<::>1 <:)ifelse(:>$<::>2<:, <::>, <::>, <:,:>:>$<::>2<:)) busprefix()_s<::>node_n() (
       .top(busout),popdef(<:busout:>)define(<:out_n:>, incr(out_n))pushdef(<:busout:>, busprefix()_out_<::>out_n())
       .out_1(busout),define(<:out_n:>, incr(out_n)) pushdef(<:busout:>, busprefix()_out_<::>out_n())
       .out_0(busout)
