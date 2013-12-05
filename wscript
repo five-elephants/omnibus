@@ -1,4 +1,7 @@
 
+def options(opt):
+    pass
+
 def configure(conf):
     conf.env.OMNIBUS_PACKAGES = [
         conf.path.abspath() + '/src/packages/bus_pkg.sv',
@@ -29,3 +32,5 @@ def configure(conf):
         conf.path.abspath() + '/m4',
     ]
 
+def build(bld):
+    pass
