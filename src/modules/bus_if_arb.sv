@@ -61,7 +61,6 @@ module Bus_if_arb
     out.MCmd = Bus::IDLE;
     out.MAddr = '0;
     out.MData = '0;
-    out.MDataValid = 1'b0;
     out.MByteEn = '0;
 
     resp_sel_in = 1'b0;
@@ -71,14 +70,12 @@ module Bus_if_arb
           out.MCmd = in_0.MCmd;
           out.MAddr = in_0.MAddr;
           out.MData = in_0.MData;
-          out.MDataValid = in_0.MDataValid;
           out.MByteEn = in_0.MByteEn;
       end else if( req_state == S_LOCK_1 ) begin
           resp_sel_in = 1'b1;
           out.MCmd = in_1.MCmd;
           out.MAddr = in_1.MAddr;
           out.MData = in_1.MData;
-          out.MDataValid = in_1.MDataValid;
           out.MByteEn = in_1.MByteEn;
       end else begin
         if( in_0.MCmd != Bus::IDLE ) begin
@@ -87,7 +84,6 @@ module Bus_if_arb
           out.MCmd = in_0.MCmd;
           out.MAddr = in_0.MAddr;
           out.MData = in_0.MData;
-          out.MDataValid = in_0.MDataValid;
           out.MByteEn = in_0.MByteEn;
         end else if( in_1.MCmd != Bus::IDLE ) begin
           resp_sel_in = 1'b1;
@@ -95,7 +91,6 @@ module Bus_if_arb
           out.MCmd = in_1.MCmd;
           out.MAddr = in_1.MAddr;
           out.MData = in_1.MData;
-          out.MDataValid = in_1.MDataValid;
           out.MByteEn = in_1.MByteEn;
         end
       end
@@ -107,23 +102,17 @@ module Bus_if_arb
   always_comb begin
     // default assignment
     in_0.SCmdAccept = 1'b0;
-    in_0.SDataAccept = 1'b0;
     in_1.SCmdAccept = 1'b0;
-    in_1.SDataAccept = 1'b0;
 
     if( push) begin
       if( req_state == S_LOCK_0 ) begin
         in_0.SCmdAccept = 1'b1;
-        in_0.SDataAccept = 1'b1;
       end else if( req_state == S_LOCK_1 ) begin
         in_1.SCmdAccept = 1'b1;
-        in_1.SDataAccept = 1'b1;
       end else if( in_0.MCmd != Bus::IDLE ) begin
         in_0.SCmdAccept = 1'b1;
-        in_0.SDataAccept = 1'b1;
       end else begin
         in_1.SCmdAccept = 1'b1;
-        in_1.SDataAccept = 1'b1;
       end
     end
   end

@@ -1,115 +1,5 @@
 import Bus::*;
 
-//module Bus_if_split
-  //#(parameter int SELECT_BIT = 31)
-  //( Bus_if.slave top,
-    //Bus_if.master out_0,
-    //Bus_if.master out_1 );
-
-  //logic next_lock, lock;
-  //logic next_sel_d, sel_d;
-
-  //assign 
-    //out_0.MReset_n = top.MReset_n,
-    //out_1.MReset_n = top.MReset_n;
-
-  //// Forward request from master to slave
-  //always_comb begin
-    //// default assignments
-    //out_0.MAddr = top.MAddr;
-    //out_0.MCmd = Bus::IDLE;
-    //out_0.MData = top.MData;
-    //out_0.MDataValid = top.MDataValid;
-    //out_0.MRespAccept = top.MRespAccept;
-    //out_0.MByteEn = top.MByteEn;
-    //out_1.MAddr = top.MAddr;
-    //out_1.MCmd = Bus::IDLE;
-    //out_1.MData = top.MData;
-    //out_1.MDataValid = top.MDataValid;
-    //out_1.MRespAccept = top.MRespAccept;
-    //out_1.MByteEn = top.MByteEn;
-
-    //if( top.MAddr[SELECT_BIT] == 1'b1 ) begin
-      //out_1.MCmd = top.MCmd;
-    //end else begin
-      //out_0.MCmd = top.MCmd;
-    //end
-  //end
-
-  //// short circuit slave accept signals
-  //always_comb begin
-    //// default assignments
-    //top.SCmdAccept = 1'b0;
-    //top.SDataAccept = 1'b0;
-
-    //if( (top.MCmd != Bus::IDLE) && (!lock || (lock && !next_lock)) ) begin
-      //if( top.MAddr[SELECT_BIT] == 1'b1 ) begin
-        //top.SCmdAccept = out_1.SCmdAccept;
-        //top.SDataAccept = out_1.SDataAccept;
-        //top.SResp = out_1.SResp;
-        //top.SData = out_1.SData;
-      //end else begin
-        //top.SCmdAccept = out_0.SCmdAccept;
-        //top.SDataAccept = out_0.SDataAccept;
-        //top.SResp = out_0.SResp;
-        //top.SData = out_0.SData;
-      //end 
-    //end else begin
-      //if( sel_d == 1'b1 ) begin
-        //top.SCmdAccept = out_1.SCmdAccept;
-        //top.SDataAccept = out_1.SDataAccept;
-        //top.SResp = out_1.SResp;
-        //top.SData = out_1.SData;
-      //end else begin
-        //top.SCmdAccept = out_0.SCmdAccept;
-        //top.SDataAccept = out_0.SDataAccept;
-        //top.SResp = out_0.SResp;
-        //top.SData = out_0.SData;
-      //end
-    //end
-  //end
-
-  //// Register leaf with outstanding response
-  //always_comb begin
-    //// default assignments
-    //next_sel_d = sel_d;
-    //next_lock = lock;
-    
-    //if( !lock ) begin
-      //if( top.MCmd != Bus::IDLE ) begin
-        //next_sel_d = top.MAddr[SELECT_BIT];
-        
-        //if( top.MRespAccept && 
-          //( (next_sel_d && (out_1.SResp == Bus::DVA))
-            //|| (!next_sel_d && (out_0.SResp == Bus::DVA)) ) )
-        //begin
-          //next_lock = 1'b0;
-        //end else begin
-          //next_lock = 1'b1;
-        //end
-      //end
-    //end else begin
-      //if( top.MRespAccept && 
-        //( (sel_d && (out_1.SResp == Bus::DVA))
-          //|| (!sel_d && (out_0.SResp == Bus::DVA)) ) )
-      //begin
-        //next_lock = 1'b0;
-      //end
-    //end
-  //end
-
-  //always_ff @(posedge top.Clk or negedge top.MReset_n)
-    //if( !top.MReset_n ) begin
-      //sel_d <= 1'b0;
-      //lock <= 1'b0;
-    //end else begin
-      //sel_d <= next_sel_d;
-      //lock <= next_lock;
-    //end
-
-//endmodule
-
-
 module Bus_if_split
   #(parameter int SELECT_BIT = 31,
     parameter int NUM_IN_FLIGHT = 4)
@@ -134,12 +24,10 @@ module Bus_if_split
     out_0.MAddr = top.MAddr;
     out_0.MCmd = Bus::IDLE;
     out_0.MData = top.MData;
-    out_0.MDataValid = top.MDataValid;
     out_0.MByteEn = top.MByteEn;
     out_1.MAddr = top.MAddr;
     out_1.MCmd = Bus::IDLE;
     out_1.MData = top.MData;
-    out_1.MDataValid = top.MDataValid;
     out_1.MByteEn = top.MByteEn;
 
     if( !full ) begin
@@ -156,15 +44,12 @@ module Bus_if_split
   always_comb begin
     // default assignment
     top.SCmdAccept = 1'b0;
-    top.SDataAccept = 1'b0;
 
     if( !full && (top.MCmd != Bus::IDLE) ) begin
       if( top.MAddr[SELECT_BIT] == 1'b1 ) begin
         top.SCmdAccept = out_1.SCmdAccept;
-        top.SDataAccept = out_1.SDataAccept;
       end else begin
         top.SCmdAccept = out_0.SCmdAccept;
-        top.SDataAccept = out_0.SDataAccept;
       end
     end
   end

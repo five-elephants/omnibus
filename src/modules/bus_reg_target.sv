@@ -25,7 +25,6 @@ module Bus_reg_target
 
   // static outputs
   assign bus.SCmdAccept = 1'b1;
-  assign bus.SDataAccept = 1'b1;
 
   assign regs = regs_i;
 

@@ -22,7 +22,6 @@ class Bus_transactor #(type Addr = int, type Data = int);
     intf.MCmd <= Bus::IDLE;
     intf.MAddr <= 0;
     intf.MData <= 0;
-    intf.MDataValid <= 1'b0;
     intf.MByteEn <= '1;
   endfunction
 
@@ -30,7 +29,6 @@ class Bus_transactor #(type Addr = int, type Data = int);
     intf.MCmd <= Bus::WR;
     intf.MAddr <= addr;
     intf.MData <= data;
-    intf.MDataValid <= 1'b1;
     intf.MByteEn <= byte_en;
     intf.MRespAccept <= 1'b1;
 

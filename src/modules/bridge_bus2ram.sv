@@ -77,7 +77,6 @@ module Bridge_bus2ram
     // default assignment
     bus_if.SResp = Bus::NULL;
     bus_if.SCmdAccept = 1'b1;
-    bus_if.SDataAccept = 1'b1;
     bus_if.SData = ram_if.data_r;
     read_reg_en = 1'b0;
     req_reg_en = 1'b0;
@@ -100,14 +99,12 @@ module Bridge_bus2ram
       S_RESP_PENDING: begin
         bus_if.SResp = Bus::DVA;
         bus_if.SCmdAccept = 1'b0;
-        bus_if.SDataAccept = 1'b0;
         bus_if.SData = read_reg;
       end
 
       S_REQ_RESP_PENDING: begin
         bus_if.SResp = Bus::DVA;
         bus_if.SCmdAccept = 1'b0;
-        bus_if.SDataAccept = 1'b0;
         bus_if.SData = read_reg;
         ram_if.addr = req_reg.MAddr;
         ram_if.en = (req_reg.MCmd == Bus::RD || bus_if.MCmd == Bus::WR);
@@ -119,7 +116,6 @@ module Bridge_bus2ram
       default: begin
         bus_if.SResp = Bus::Ocp_resp'('x);
         bus_if.SCmdAccept = 1'bx;
-        bus_if.SDataAccept = 1'bx;
         bus_if.SData = 'x;
         read_reg_en = 1'bx;
         req_reg_en = 1'bx;

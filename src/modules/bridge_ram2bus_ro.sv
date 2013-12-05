@@ -14,7 +14,6 @@ module Bridge_ram2bus_ro
   //assign bus.MCmd = request ? Bus::RD : Bus::IDLE;
   assign bus.MRespAccept = 1'b1;
   assign bus.MData = '0;
-  assign bus.MDataValid = 1'b0;
   assign bus.MByteEn = ram.be;
 
   assign ram.data_r = bus.SData;

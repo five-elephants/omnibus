@@ -6,7 +6,7 @@ interface Bus_if
     parameter int addr_width = 32,
     parameter bit data = 1'b1,
     parameter int data_width = 32,
-    parameter bit datahandshake = 1'b1,
+    parameter bit datahandshake = 1'b0,
     parameter bit respaccept = 1'b1,
     parameter bit cmdaccept = 1'b1,
     parameter bit sdata = 1'b1,
@@ -34,11 +34,9 @@ interface Bus_if
   Addr      MAddr;
   Ocp_cmd   MCmd;
   Data      MData;
-  logic     MDataValid;
   logic     MRespAccept;
   logic     SCmdAccept;
   Data      SData;
-  logic     SDataAccept;
   Ocp_resp  SResp;
 
   // simple extension
@@ -51,8 +49,8 @@ interface Bus_if
     `endif
     input Clk,
     output MReset_n,
-    output MAddr, MCmd, MData, MDataValid, MRespAccept, MByteEn,
-    input SCmdAccept, SData, SDataAccept, SResp
+    output MAddr, MCmd, MData, MRespAccept, MByteEn,
+    input SCmdAccept, SData, SResp
   );
   modport slave(
     `ifdef SYNTOOL_SYNPLIFY
@@ -60,25 +58,17 @@ interface Bus_if
     `endif
     input Clk, 
     input MReset_n,
-    input MAddr, MCmd, MData, MDataValid, MRespAccept, MByteEn,
-    output SCmdAccept, SData, SDataAccept, SResp
+    input MAddr, MCmd, MData, MRespAccept, MByteEn,
+    output SCmdAccept, SData, SResp
   );
 
   `ifndef SYNTHESIS
-
-  /** Separate data and address phases are not allowed */
-  check_sdataaccept_unused: assert property (
-    @(posedge Clk) disable iff(!MReset_n) ((SCmdAccept == 1'b1) |-> (SDataAccept == 1'b1))
-  ) else $error("Separate data and address phases are not allowed");
-
-  /** MDataValid must be on together with MCmd == WR */
 
   /** Request data must stay stable until SCmdAccept is asserted. */
   property request_stable;
     Ocp_cmd a_MCmd;
     Addr a_MAddr;
     Data a_MData;
-    logic a_MDataValid;
     Byte_en a_MByteEn;
 
     @(posedge Clk) disable iff(!MReset_n)
@@ -86,10 +76,9 @@ interface Bus_if
       a_MCmd = MCmd,
       a_MAddr = MAddr,
       a_MData = MData,
-      a_MDataValid = MDataValid,
       a_MByteEn = MByteEn)
-      |-> ((MCmd === a_MCmd && a_MAddr === MAddr && a_MData === MData && a_MDataValid === MDataValid) [* 1:$] 
-        ##1 (SCmdAccept && MCmd === a_MCmd && a_MAddr === MAddr && a_MData === MData && a_MDataValid === MDataValid)) );
+      |-> ((MCmd === a_MCmd && a_MAddr === MAddr && a_MData === MData) [* 1:$] 
+        ##1 (SCmdAccept && MCmd === a_MCmd && a_MAddr === MAddr && a_MData === MData)) );
   endproperty
 
   check_request_stable: assert property (request_stable) else

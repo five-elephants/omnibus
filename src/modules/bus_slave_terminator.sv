@@ -3,7 +3,6 @@ module Bus_slave_terminator
 
   assign 
     bus.SCmdAccept = 1'b0,
-    bus.SDataAccept = 1'b0,
     bus.SData = '0,
     bus.SResp = Bus::NULL;
 

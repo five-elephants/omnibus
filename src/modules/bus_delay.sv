@@ -13,7 +13,6 @@ module Bus_delay
   typedef struct packed {
     Bus::Ocp_cmd MCmd;
     Data MData;
-    logic MDataValid;
     Addr MAddr;
     Byte_en MByteEn;
   } Request;
@@ -38,8 +37,7 @@ module Bus_delay
     req_data_in.MCmd = in.MCmd,
     req_data_in.MData = in.MData,
     req_data_in.MAddr = in.MAddr,
-    req_data_in.MByteEn = in.MByteEn,
-    req_data_in.MDataValid = in.MDataValid;
+    req_data_in.MByteEn = in.MByteEn;
 
   Delay_stage #(.WIDTH($bits(Request))) req_stage (
     .clk(in.Clk),
@@ -53,15 +51,13 @@ module Bus_delay
   );
 
   assign 
-    in.SCmdAccept = req_accept_in,
-    in.SDataAccept = req_accept_in;
+    in.SCmdAccept = req_accept_in;
 
   assign req_in = (in.MCmd != Bus::IDLE);
   assign out.MCmd = req_out ? req_data_out.MCmd : Bus::IDLE;
   assign 
     out.MData = req_data_out.MData,
     out.MAddr = req_data_out.MAddr,
-    out.MDataValid = req_data_out.MDataValid,
     out.MByteEn = req_data_out.MByteEn;
 
   //---------------------------------------------------------------------------

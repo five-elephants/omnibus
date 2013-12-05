@@ -62,7 +62,6 @@ module Bus_serial
     // default assignment
     next_master_word_in = master_word_in;
     in.SCmdAccept = master_rx_ready;
-    in.SDataAccept = master_rx_ready;
     master_ser_start = 1'b0;
 
     if( (in.MCmd != Bus::IDLE) && master_rx_ready ) begin
@@ -112,7 +111,6 @@ module Bus_serial
     out.MAddr = '0;
     out.MData = '0;
     out.MByteEn = '0;
-    out.MDataValid = 1'b0;
     //master_rx_ready = out.SCmdAccept & master_des_ready;
     master_rx_ready = master_des_ready & cmd_accepted;
 
