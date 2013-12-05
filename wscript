@@ -18,9 +18,11 @@ def configure(conf):
         conf.path.abspath() + '/src/modules/bus_serial.sv',
         conf.path.abspath() + '/src/modules/bus_slave_terminator.sv',
     ]
-    conf.env.OMNIBUS_SIM_SOURCE = [
+    conf.env.OMNIBUS_SIM_PACKAGES = [
+        conf.path.abspath() + '/src/classes/bus_tb_pkg.sv',
     ]
     conf.env.OMNIBUS_VERILOG_INCLUDE = [
+        conf.path.abspath() + '/src/classes',
     ]
 
     conf.env.OMNIBUS_M4_INCLUDE = [
