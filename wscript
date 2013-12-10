@@ -11,6 +11,7 @@ def configure(conf):
         conf.path.abspath() + '/src/interfaces/ram_if.sv',
     ]
     conf.env.OMNIBUS_MODULES = [
+        conf.path.abspath() + '/src/modules/bus_connect.sv',
         conf.path.abspath() + '/src/modules/bridge_bus2ram.sv',
         conf.path.abspath() + '/src/modules/bridge_ram2bus_ro.sv',
         conf.path.abspath() + '/src/modules/bus_delay.sv',

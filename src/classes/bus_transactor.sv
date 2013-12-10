@@ -19,11 +19,16 @@ class Bus_transactor #(type Addr = int, type Data = int);
   endfunction
 
   function automatic void clear_request();
-    intf.MCmd <= Bus::IDLE;
-    intf.MAddr <= 0;
-    intf.MData <= 0;
-    intf.MByteEn <= '1;
+    intf.MReset_n = 1'b1;
+    intf.MCmd = Bus::IDLE;
+    intf.MAddr = 0;
+    intf.MData = 0;
+    intf.MByteEn = '1;
   endfunction
+
+  task reset();
+    intf.MReset_n <= 1'b0;
+  endtask
 
   task automatic write(input Addr addr, Data data, Data_byte_en byte_en);
     intf.MCmd <= Bus::WR;
