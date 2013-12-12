@@ -23,6 +23,7 @@ divert(-1)dnl
 
   dnl define(<:with_byteen:>. <:.byteen(1):>)
   define(<:num_in_flight:>, <:.NUM_IN_FLIGHT(:>$<::>1<:):>)
+  define(<:reset_by_0:>, <:.RESET_BY_0(:>$<::>1<:):>)
 
   define(<:arb:>, <:define(<:node_n:>, incr(node_n))dnl
 
