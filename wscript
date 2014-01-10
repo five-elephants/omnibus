@@ -21,6 +21,7 @@ def configure(conf):
         conf.path.abspath() + '/src/modules/bus_reg_target.sv',
         conf.path.abspath() + '/src/modules/bus_serial.sv',
         conf.path.abspath() + '/src/modules/bus_slave_terminator.sv',
+        conf.path.abspath() + '/src/modules/bus_valve.sv',
     ]
     conf.env.OMNIBUS_SIM_PACKAGES = [
         conf.path.abspath() + '/src/classes/bus_tb_pkg.sv',

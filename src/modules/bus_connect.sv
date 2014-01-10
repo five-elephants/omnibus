@@ -1,6 +1,6 @@
 module Bus_connect
-  ( Bus_if.master in,
-    Bus_if.slave out );
+  ( Bus_if.slave in,
+    Bus_if.master out );
 
   assign
     out.MReset_n = in.MReset_n,
