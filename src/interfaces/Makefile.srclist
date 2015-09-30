@@ -1,0 +1,2 @@
+src-y += bus_if.sv \
+	 ram_if.sv

@@ -1,0 +1,11 @@
+src-y += bus_connect.sv \
+	 bridge_bus2ram.sv \
+	 bridge_ram2bus_ro.sv \
+	 bus_delay.sv \
+	 bus_if_arb.sv \
+	 bus_if_split.sv \
+	 bus_master_terminator.sv \
+	 bus_reg_target.sv \
+	 bus_serial.sv \
+	 bus_slave_terminator.sv \
+	 bus_valve.sv
