@@ -9,6 +9,7 @@ import Bus::*;
 * out. If this option is not set out is reset when either of them is in reset. */
 module Bus_if_arb
   #(parameter bit RESET_BY_0 = 1'b0,
+    parameter bit RESET_BY_1 = 1'b0,
     parameter int NUM_IN_FLIGHT = 4)
   ( Bus_if.slave in_0,
     Bus_if.slave in_1,
@@ -20,10 +21,10 @@ module Bus_if_arb
   //---------------------------------------------------------------------------
  
   typedef enum logic[2:0] {
+    S_UNDEF  = 3'bxxx,
     S_IDLE   = 3'b001,
     S_LOCK_0 = 3'b010,
-    S_LOCK_1 = 3'b100,
-    S_UNDEF  = 3'bxxx
+    S_LOCK_1 = 3'b100
   } Req_state;
 
   logic resetb;
@@ -46,10 +47,18 @@ module Bus_if_arb
   //---------------------------------------------------------------------------
 
   generate
-  if( RESET_BY_0 ) begin : gen_reset_by_0
+  if( RESET_BY_0 && !RESET_BY_1 ) begin : gen_reset_by_0
+
     assign resetb = in_0.MReset_n;
+
+  end else if( !RESET_BY_0 && RESET_BY_1 ) begin : gen_reset_by_1
+
+    assign resetb = in_1.MReset_n;
+
   end else begin : gen_reset_combined
+
     assign resetb = in_0.MReset_n & in_1.MReset_n;
+
   end
   endgenerate
   
@@ -117,8 +126,8 @@ module Bus_if_arb
     end
   end
 
-  always_ff @(posedge in_0.Clk or negedge in_0.MReset_n)
-    if( !in_0.MReset_n )
+  always_ff @(posedge in_0.Clk or negedge resetb)
+    if( !resetb )
       req_state <= S_IDLE;
     else
       unique case(req_state)
@@ -214,6 +223,17 @@ module Bus_if_arb
         pop = 1'b1;
     end
   end
+
+
+`ifndef SYNTHESIS
+
+  initial begin
+    check_reset_params: assert(!(RESET_BY_0 && RESET_BY_1));
+    warn_convergent_reset: assert( RESET_BY_0 ^ RESET_BY_1 ) else
+      $warning("Your arbiter configuration generates the downstream reset as logical combination of upstream resets.");
+  end
+
+`endif  /* SYNTHESIS */
 
 endmodule
 

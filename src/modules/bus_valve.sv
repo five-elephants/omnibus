@@ -5,11 +5,12 @@
 module Bus_valve
   ( Bus_if.slave in,
     Bus_if.master out,
-    input logic close );
+    input logic close,
+    input logic reset );
 
   always_comb begin 
     if( close ) begin
-      out.MReset_n = 1'b1;
+      out.MReset_n = ~reset;
       out.MAddr = 'x;
       out.MCmd = Bus::IDLE;
       out.MData = 'x;

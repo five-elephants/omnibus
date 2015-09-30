@@ -84,13 +84,16 @@ interface Bus_if
   check_request_stable: assert property (request_stable) else
     $error("Request data must stay stable until SCmdAccept is asserted");
 
-  /** Response must stay stable until MRespAccept is asserted. */
+
+  /**
+   * Response must stay stable until MRespAccept is asserted.
+   * */
   property response_stable;
     Ocp_resp a_SResp;
     Data a_SData;
 
     @(posedge Clk) disable iff(!MReset_n)
-    ( ((SResp != Bus::NULL) && !MRespAccept,
+    ( ((SResp == Bus::DVA) && !MRespAccept,
       a_SResp = SResp,
       a_SData = SData)
       |-> ((SResp === a_SResp && SData === a_SData) [* 1:$]
@@ -99,6 +102,19 @@ interface Bus_if
 
   check_response_stable: assert property(response_stable) else
     $error("Response must stay stable until MRespAccept is asserted");
+
+
+  /**
+   * Check, that only valid response codes are used.
+   */
+  property allowed_response_codes;
+    @(posedge Clk) disable iff(!MReset_n)
+    ( (SResp == Bus::NULL) || (SResp == Bus::DVA) );
+  endproperty
+
+  check_allowed_response_codes: assert property(allowed_response_codes) else
+    $error("Only the NULL and DVA response codes are supported at the moment.");
+
 
   /** MByteEn may only be used when byteen is set. */
   check_byteen_opt: assert property (

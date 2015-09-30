@@ -1,14 +1,15 @@
 module Bus_delay
-  //#(parameter int DELAY = 1)
+  #(parameter int addr_width = 32,
+    parameter int data_width = 32)
   ( Bus_if.slave in,
     Bus_if.master out );
 
   assign out.MReset_n = in.MReset_n;
 
   // XXX parameters!!!
-  typedef logic[31:0] Data;
-  typedef logic[31:0] Addr;
-  typedef logic[31/8:0] Byte_en;
+  typedef logic[data_width-1:0] Data;
+  typedef logic[addr_width-1:0] Addr;
+  typedef logic[data_width/8-1:0] Byte_en;
 
   typedef struct packed {
     Bus::Ocp_cmd MCmd;

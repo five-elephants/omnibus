@@ -9,7 +9,7 @@ package Bus;
 		WRNP      = 3'b101,
 		WRC       = 3'b110,
 		BCST      = 3'b111,
-    UNDEF_CMD = 3'bxxx
+		UNDEF_CMD = 3'bxxx
 	} Ocp_cmd;
 
 	typedef enum logic[1:0] {
@@ -17,7 +17,7 @@ package Bus;
 		DVA        = 2'b01,
 		FAIL       = 2'b10,
 		ERR        = 2'b11,
-    UNDEF_RESP = 2'bxx
+		UNDEF_RESP = 2'bxx
 	} Ocp_resp;
 
 	function automatic int clog2(input int x);
@@ -30,3 +30,6 @@ package Bus;
 		//return $clog2(x);
 	endfunction
 endpackage
+
+
+/* vim: set noet fenc= ff=unix sts=0 sw=4 ts=4 : */
